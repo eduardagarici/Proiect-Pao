@@ -1,7 +1,12 @@
 package proiectPao;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -10,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 /**
  * Servlet implementation class HelloServlet
@@ -20,7 +26,8 @@ import javax.servlet.http.HttpServletResponse;
      @WebInitParam(name = "emailSupport2", value = "tom@example.com") })
 public class HelloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-        
+	@Resource(name = "jdbc/myDb")
+	private DataSource dbRes;  
     private String emailSupport1;
  
     public HelloServlet() {
@@ -40,20 +47,20 @@ public class HelloServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
  
-        // Get the initialization parameter's value in a different way.
-        String emailSupport2 = this.getServletConfig().getInitParameter("emailSupport2");
- 
-        ServletOutputStream out = response.getOutputStream();
- 
-        out.println("<html>");
-        out.println("<head><title>Init Param</title></head>");
- 
-        out.println("<body>");
-        out.println("<h3>Servlet with Annotation configuration</h3>");
-        out.println("<p>emailSupport1 = " + this.emailSupport1 + "</p>");
-        out.println("<p>emailSupport2 = " + emailSupport2 + "</p>");
-        out.println("</body>");
-        out.println("<html>");
+    	double nr=5;
+		try ( Connection con=dbRes.getConnection();
+			  PreparedStatement ps=con.prepareStatement("Select * from employees");
+			  ResultSet rs=ps.executeQuery())
+		{
+			rs.next();
+			nr=rs.getDouble("employee_id");
+			System.out.println("200");
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		request.getSession().setAttribute("numar", nr);
+		this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
     }
  
     @Override
