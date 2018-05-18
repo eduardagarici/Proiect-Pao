@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-SAL MAN!DAU BINE CU POLANUL!
+SAL MAN!
 </body>
 </html>

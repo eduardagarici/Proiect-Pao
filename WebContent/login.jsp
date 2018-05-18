@@ -1,3 +1,4 @@
+<%@page import="javax.sound.midi.Soundbank"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,7 +13,7 @@
 <body>
 <div class="login-page">
   <div class="form">
-    <form class="register-form" action="/Register" method="POST">
+    <form class="register-form" action="http://localhost:8080/ProiectPao/Register" method="POST">
       <input type="text" placeholder="username" name="username"/>
       <input type="password" placeholder="password" name="password"/>
       <input type="text" placeholder="email address" name="email"/>
@@ -24,6 +25,13 @@
     <form class="login-form" action="http://localhost:8080/ProiectPao/Login" method="POST">
       <input type="text" placeholder="username" name="username"/>
       <input type="password" placeholder="password" name="password"/>
+      <%
+      	String failed=(String) request.getAttribute("failed");	
+      	System.out.println(failed);	  
+      	if (failed!=null) 
+        	if(failed.equals("failed")) {%> 
+      			<p class="message incorrect">Incorrect Username or Password </p>      				
+       	    <%}%>
       <button type="submit">login</button>
       <p class="message"><a href="#">Continue as guest</a></p>
       <p class="message">Not registered? <a href="#">Create an account</a></p>

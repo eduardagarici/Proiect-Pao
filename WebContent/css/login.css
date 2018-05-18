@@ -59,7 +59,9 @@
 }
 .form .incorrect{
 	color:red;
-	display:none;
+	font-size:20px;
+	margin-bottom:10px;
+	margin-top:0;
 }
 .container {
   position: relative;

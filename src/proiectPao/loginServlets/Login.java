@@ -1,7 +1,6 @@
 package proiectPao.loginServlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +8,7 @@ import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +27,7 @@ public class Login extends HttpServlet {
     
 	public Login() {
     }
-    // This method is always called once after the Servlet object is created.
+  
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -40,27 +40,40 @@ public class Login extends HttpServlet {
 		String username,password,privileges;
 		username=request.getParameter("username");
 		password=request.getParameter("password");
-		System.out.println(username);
-		System.out.println(password);
 		try ( Connection con=dbRes.getConnection();
-			  PreparedStatement ps=con.prepareStatement("select * from employees");
-				//PreparedStatement ps=con.prepareStatement(
-				//	"Select * from Student where username=" + username + "and password=" + password );
+			 
+				PreparedStatement ps=con.prepareStatement(
+				"select * from user_hotel where username='" + username + "' and password='" + password + "'");
 				  ResultSet rs=ps.executeQuery())
 			{
-				System.out.println(200);
-				if(rs.isBeforeFirst()) {
-					Boolean login=false;
-					request.setAttribute("failed",login);
-					System.out.println("Salut");
-					this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
-				}
-				else {
+				if(rs.next()) {
+					System.out.println("merge");
 					rs.next();
 					privileges=rs.getString("privileges");
 					request.getSession().setAttribute("username", username);
-					request.getSession().setAttribute("id_user", rs.getInt("id_user"));
-					this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+					request.getSession().setAttribute("id_user", rs.getDouble("id_user"));
+					ServletContext context=this.getServletContext();
+					switch(privileges) {
+						case "admin":
+							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							break;
+						case "receptionist":
+							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							break;
+						case "client":
+							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							break;
+						case "webservice":
+							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							break;
+						default:
+							break;
+					}	
+				}
+				else {
+					request.setAttribute("failed", "failed");
+					System.out.println("Nu merge");
+					this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 				}
 			}
 			catch(SQLException e) {
