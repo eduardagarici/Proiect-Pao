@@ -7,10 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	Iata un numar : 
-	<% 
-	double nr=(Double)request.getSession().getAttribute("numar");
-    out.write(Double.toString(nr));
-	%>
+SAL MAN!DAU BINE CU POLANUL!
 </body>
 </html>
