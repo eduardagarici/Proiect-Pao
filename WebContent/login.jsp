@@ -17,23 +17,45 @@
       <input type="text" placeholder="username" name="username"/>
       <input type="password" placeholder="password" name="password"/>
       <input type="text" placeholder="email address" name="email"/>
-      <input type="text" placeholder="first name" name="fist"/>
+      <input type="text" placeholder="first name" name="first"/>
       <input type="text" placeholder="last name" name="last"/>
+      <%String source=(String)request.getAttribute("source");
+      	if(source!=null)
+      	{%><input type="hidden" name="source" value=<%out.write("'"+source +"'");%> /><%} 
+      	boolean hide=false;
+      	String failed2=(String) request.getAttribute("failed2");		  
+      	if (failed2!=null) 
+        	if(failed2.equals("failed")) {%> 
+      			<p class="message incorrect">Registration failed! Please try again!</p>      				
+       	    <%} 
+        	else {hide=true;
+        		 
+        	 %>
+        		<script>
+      				var register=document.getElementsByClassName("register-form");
+      				register[0].style.display="block";
+      			</script>    
+       	    	<p class="message incorrect">Username already used!</p>
+       	    <%} %>
       <button>create</button>
       <p class="message">Already registered? <a href="#">Sign In</a></p>
     </form>
-    <form class="login-form" action="http://localhost:8080/ProiectPao/Login" method="POST">
+   	<%if(hide==false) {%> 
+    	<form class="login-form" action="http://localhost:8080/ProiectPao/Login" method="POST">
+    	<%} 
+      else {%> 
+      	<form class="register-form" action="http://localhost:8080/ProiectPao/Login" method="POST">
+      	<%} %>
       <input type="text" placeholder="username" name="username"/>
       <input type="password" placeholder="password" name="password"/>
       <%
-      	String failed=(String) request.getAttribute("failed");	
-      	System.out.println(failed);	  
+      	String failed=(String) request.getAttribute("failed");		  
       	if (failed!=null) 
         	if(failed.equals("failed")) {%> 
-      			<p class="message incorrect">Incorrect Username or Password </p>      				
+      			<p class="message incorrect">Incorrect Username or Password </p>   				
        	    <%}%>
       <button type="submit">login</button>
-      <p class="message"><a href="#">Continue as guest</a></p>
+      <p class="message"><a href="http://localhost:8080/ProiectPao/MainPage.jsp">Continue as guest</a></p>
       <p class="message">Not registered? <a href="#">Create an account</a></p>
     </form>
   </div>

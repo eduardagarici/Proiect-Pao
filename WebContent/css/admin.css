@@ -1,0 +1,68 @@
+body {
+	background-image:
+		url("https://s-ec.bstatic.com/images/hotel/max1024x768/370/37024558.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#primul {
+	position:absolute;
+	left:22%;
+	top:26%;
+	background-color: white;
+	width: 300px;
+	font-family: Calibri;
+	padding: 20px;
+}
+#doi {
+	position:absolute;
+	left:48%;
+	top:26%;
+	background-color: white;
+	width: 300px;
+	font-family: Calibri;
+	padding: 20px;
+}
+#antet
+{
+	position:absolute;
+	left:36%;
+	top:14%;
+	background-color: white;
+	width: 100;
+	font-family: Calibri;
+	padding: 20px;
+}
+button {
+	background-color: #44c767;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+	border: 1px solid #18ab29;
+	display: inline-block;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 12px;
+	padding: 12px 27px;
+	text-decoration: none;
+	text-shadow: 0px 2px 0px #2f6627;
+	margin-left: 20px;
+	margin-top: 7px;
+}
+
+button:hover {
+	background-color: #5cbf2a;
+}
+
+button:active {
+	position: relative;
+	top: 1px;
+}
+
+h1 {
+	position:absolute;
+	color:white;
+	font-size: 30px;
+	left:34%;
+}

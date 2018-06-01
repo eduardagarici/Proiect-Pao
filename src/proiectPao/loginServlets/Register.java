@@ -39,31 +39,34 @@ public class Register extends HttpServlet {
 		String email=request.getParameter("email");
 		String firstName=request.getParameter("first");
 		String lastName=request.getParameter("last");
-		
 		try(Connection con=dbRes.getConnection();
 			PreparedStatement ps=con.prepareStatement(
-			"select * from user_hotel where username='" + username + "' and password='" + password + "'");
+			"select * from user_hotel where username='" + username + "'");
 			ResultSet rs=ps.executeQuery()){
 			if(!rs.next()) {
 				int nr=getAllUsers();
 				if(nr==-1) {
-					//registration failed
+					request.setAttribute("failed2", "failed");
+					this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 				}
 				nr++;
-				System.out.println("salut");
+				System.out.println("insert into user_hotel values ('" + username + "','" + password + 
+						"','" + email + "','" + lastName + "','" + firstName + "','" + "client','" + nr +"')");
 				try(PreparedStatement ps2=con.prepareStatement(
-					"insert into user_hotel values (" + username + "," + password + 
-					"," + email + "," + lastName + "," + firstName + "," + "client," + nr +")")){
+					"insert into user_hotel values ('" + nr + "','" + username + "','" + password + 
+					"','" + email + "','" + lastName + "','" + firstName + "','" + "client')")){
 					int result=ps2.executeUpdate();
 					if(result!=1)
 					{
-						//registration failed
+						request.setAttribute("failed2", "failed");
+						this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 					}
-					this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+					this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 				}
 			}
 			else {
-				//registration failed - username already used
+				request.setAttribute("failed2", "used");
+				this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 			}
 		}
 		catch(SQLException e) {

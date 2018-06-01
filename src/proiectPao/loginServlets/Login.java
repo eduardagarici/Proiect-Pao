@@ -37,7 +37,7 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username,password,privileges;
+		String username,password,privileges="";
 		username=request.getParameter("username");
 		password=request.getParameter("password");
 		try ( Connection con=dbRes.getConnection();
@@ -47,32 +47,35 @@ public class Login extends HttpServlet {
 				  ResultSet rs=ps.executeQuery())
 			{
 				if(rs.next()) {
-					System.out.println("merge");
-					rs.next();
-					privileges=rs.getString("privileges");
+					privileges=rs.getString("role");
+					System.out.println(privileges);
 					request.getSession().setAttribute("username", username);
-					request.getSession().setAttribute("id_user", rs.getDouble("id_user"));
+					request.getSession().setAttribute("id_user", rs.getInt("id_user"));
 					ServletContext context=this.getServletContext();
+					System.out.println(request.getParameter("source"));
+					
 					switch(privileges) {
 						case "admin":
-							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							context.getRequestDispatcher("/adminmode.jsp").forward(request, response);
 							break;
 						case "receptionist":
-							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							context.getRequestDispatcher("/MainPageRecep.jsp").forward(request, response);
 							break;
 						case "client":
-							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							if(request.getParameter("source")!=null)
+								context.getRequestDispatcher("/PresentationPage.jsp");
+							context.getRequestDispatcher("/MainPage.jsp").forward(request, response);
 							break;
 						case "webservice":
-							context.getRequestDispatcher("/index.jsp").forward(request, response);
+							context.getRequestDispatcher("/webservice.jsp").forward(request, response);
 							break;
 						default:
+							System.out.println("ABRACADABRA");
 							break;
 					}	
 				}
 				else {
 					request.setAttribute("failed", "failed");
-					System.out.println("Nu merge");
 					this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 				}
 			}
